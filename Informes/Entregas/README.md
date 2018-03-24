@@ -1,15 +1,3 @@
-## Primera opción
-
-<object data="IngSoftware/Informes/Entregas/Primera_entrega1.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="IngSoftware/Informes/Entregas/Primera_entrega1.pdf">
-        This browser does not support PDFs. Please download the PDF to view it: <a href="IngSoftware/Informes/Entregas/Primera_entrega1.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
-
-## Segunda opción
-
-<object data="IngSoftware/Informes/Entregas/Primera_entrega2.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="IngSoftware/Informes/Entregas/Primera_entrega2.pdf">
-        This browser does not support PDFs. Please download the PDF to view it: <a href="IngSoftware/Informes/Entregas/Primera_entrega2.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+## Decision de Template :
+ 1. [Primera Opción ](IngSoftware/Informes/Entregas/Primera_entrega1.pdf)
+ 2. [Segunda Opción ](IngSoftware/Informes/Entregas/Primera_entrega2.pdf)
