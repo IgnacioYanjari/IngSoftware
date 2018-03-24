@@ -2,6 +2,6 @@
 Desarrollo de proyecto y informes
 
 ## Estructura de Carpetas
-### Informes
+ - Informes
   * [Template Pdf](Informes/Template)
   * [Entregas](Informes/Entregas)
