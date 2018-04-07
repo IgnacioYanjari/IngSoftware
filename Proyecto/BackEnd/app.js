@@ -18,7 +18,7 @@ nexmo.message.sendSms(from,to,text,
     if (err) {
       console.log(err);
     } else {
-      console.dir(responseData);
+      console.log(responseData);
     }
   });
 
