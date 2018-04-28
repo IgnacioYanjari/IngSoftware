@@ -1,0 +1,24 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/icons": "^1.0.0-beta.43",
+    "ajv": "^6.4.0",
+    "ajv-keywords": "^3.2.0",
+    "antd": "^3.4.4",
+    "babel-plugin-import": "^1.7.0",
+    "material-ui": "^1.0.0-beta.43",
+    "react": "^16.3.2",
+    "react-app-rewired": "^1.5.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4",
+    "typeface-roboto": "0.0.54"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --end=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
