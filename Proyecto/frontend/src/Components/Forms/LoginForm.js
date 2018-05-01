@@ -25,7 +25,7 @@ class LoginForm extends Component{
     else if (name.length === 0)
       message.error('Agregar usuario',2)
     else if (password.length === 0)
-      message.error('Agregar password',2)
+      message.error('Agregar contraseña',2)
     else {
       message.loading('Esperando respuesta del servidor',5)
       console.log( "nombre : ", name);

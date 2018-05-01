@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './../../App.css';
 import LoginForm from './../Forms/LoginForm.js';
-import LockIcon from '@material-ui/icons/Lock'
+// import LockIcon from '@material-ui/icons/Lock'
 
 import Card, { CardContent } from 'material-ui/Card';
 import Grid from 'material-ui/Grid';
@@ -18,9 +18,10 @@ class LoginPage extends Component {
           <Card aling="center">
             <CardContent>
               <Typography align="center" variant="title" >
-                  <LockIcon style={{ fontSize: 30 }}/>
-                  </Typography>
+                  <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
+              </Typography>
               <Typography align="center" variant="title" >
+                <br/>
                 Iniciar Sesión
               </Typography>
               <LoginForm/>
@@ -40,5 +41,5 @@ class LoginPage extends Component {
     );
   }
 }
-
+// <LockIcon style={{ fontSize: 30 }}/>
 export default LoginPage;
