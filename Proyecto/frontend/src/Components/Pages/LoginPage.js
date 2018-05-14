@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './../../App.css';
-import LoginForm from './../Forms/LoginForm.js';
+import MainForm from './../Forms/MainForm.js';
 // import LockIcon from '@material-ui/icons/Lock'
 
 import Card, { CardContent } from 'material-ui/Card';
@@ -20,11 +20,7 @@ class LoginPage extends Component {
               <Typography align="center" variant="title" >
                   <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
               </Typography>
-              <Typography align="center" variant="title" >
-                <br/>
-                Iniciar Sesión
-              </Typography>
-              <LoginForm/>
+              <MainForm/>
               <Typography style={{marginTop:'5%'}}align="center" variant="body2" >
                 Consultas a ......
               </Typography>
