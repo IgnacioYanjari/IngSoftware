@@ -3,9 +3,34 @@ import TextField from 'material-ui/TextField';
 import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-// import {message} from 'antd';
+import {message} from 'antd';
 
 class RegisterForm extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      email:'',
+      user:'',
+      password:''
+    }
+  }
+
+  handleChange(event){
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    console.log(name + ':' + value);
+    this.setState({
+      [name] : value
+    });
+  }
+
+  sendAccount(event){
+    // Realizar validación
+    message.loading('caca')
+    event.preventDefault();
+  }
+
   render(){
     return(
       <div>
@@ -13,32 +38,39 @@ class RegisterForm extends Component{
           <br/>
           Registrarse
         </Typography>
-        <form style={{display: 'flex',flexWrap: 'wrap'}}>
+        <form action="" method="" style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.sendAccount}>
           <TextField
-            id="name"
+            name="user"
+            type="text"
             label="Usuario"
             margin="normal"
             fullWidth
             required
+            onChange = {e => this.handleChange(e)}
           />
 
           <TextField
-            id="email"
+            name="email"
             label="E-mail"
             margin="normal"
+            type="email"
             fullWidth
             required
+            onChange = {e => this.handleChange(e)}
           />
 
           <TextField
-            id="password"
+            name="password"
+            value={this.state.password}
             label="Contraseña"
+            type="password"
             margin="normal"
             fullWidth
             required
+            onChange = {e => this.handleChange(e)}
           />
           <CardActions>
-            <Button  size="small" color="primary">
+            <Button type="submit"  size="small" color="primary">
               Terminar Registro
             </Button>
 

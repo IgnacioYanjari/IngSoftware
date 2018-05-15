@@ -13,7 +13,7 @@ var responseHeader = require('./system/responseHeader.js')
 // Require de las rutas:
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var SMSRouter = require('./routes/SMSRouter');
+var sendSMS = require('./routes/sendSMS');
 
 var app = express();
 
@@ -31,10 +31,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // Rutas :
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/sendSMS', SMSRouter);
+app.use('/sendSMS', sendSMS);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -43,6 +44,7 @@ app.use(function(req, res, next) {
 
 // Error handler
 app.use(function(err, req, res, next) {
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -51,5 +53,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;

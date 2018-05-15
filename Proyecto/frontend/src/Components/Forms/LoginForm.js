@@ -9,41 +9,29 @@ class LoginForm extends Component{
   constructor(props){
     super(props);
     this.state={
-      name :'',
+      user :'',
       password:''
     };
-    this.checkUser = this.checkUser.bind(this);
-    this.updateName = this.updateName.bind(this);
-    this.updatePassword = this.updatePassword.bind(this);
+    this.checkLogin = this.checkLogin.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  checkUser(e){
+  checkLogin(e){
     const name = this.state.name;
     const password = this.state.password;
-    if(name.length === 0 && password.length === 0)
-      message.error('Agregar usuario y contraseña',2)
-    else if (name.length === 0)
-      message.error('Agregar usuario',2)
-    else if (password.length === 0)
-      message.error('Agregar contraseña',2)
-    else {
-      message.loading('Esperando respuesta del servidor',5)
-      console.log( "nombre : ", name);
-      console.log( "password : ", password);
-      //Realizar confirmación con base de datos.
-    }
+    message.loading('Esperando respuesta del servidor',5);
+    console.log( "nombre : ", name);
+    console.log( "password : ", password);
+    e.preventDefault();
   }
 
-  updateName(e){
+  handleChange(event){
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
     this.setState({
-      name:e.target.value
+      [name] : value
     });
-  }
-
-  updatePassword(e){
-    this.setState({
-      password:e.target.value
-    })
   }
 
   render(){
@@ -53,28 +41,29 @@ class LoginForm extends Component{
           <br/>
           Iniciar Sesión
         </Typography>
-        <form style={{display: 'flex',flexWrap: 'wrap'}}>
+        <form style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.checkLogin}>
             <TextField
-              id="name"
+              name="user"
               label="Usuario"
               margin="normal"
               fullWidth
               required
-              onChange = {e => this.updateName(e)}
-              error = {this.state.name.length === 0}
+              onChange = {e => this.handleChange(e)}
+
             />
 
             <TextField
-              id="password"
+              name="password"
               label="Contraseña"
+              type="password"
               margin="normal"
               fullWidth
               required
-              onChange = {e => this.updatePassword(e)}
-              error = {this.state.password.length === 0}
+              onChange = {e => this.handleChange(e)}
+
             />
             <CardActions>
-              <Button onClick={(e)=>this.checkUser(e)} size="small" color="primary">
+              <Button type="submit" size="small" color="primary">
                 Ingresar
               </Button>
 

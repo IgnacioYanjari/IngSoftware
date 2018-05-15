@@ -22,14 +22,15 @@ class MainForm extends Component{
   renderRegister(){
     return(
       <RegisterForm
-      changeRender = {this.changeRender}/>
+      changeRender = {this.changeRender}
+      />
     )
   }
 
   changeRender(e){
     this.setState( (prevState,props)=>{
       return{render : !prevState.render}
-    })
+    });
   }
 
   render(){
