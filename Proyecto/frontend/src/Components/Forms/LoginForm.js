@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
+import Typography from 'material-ui/Typography';
 import {message} from 'antd';
 
 class LoginForm extends Component{
@@ -9,8 +10,7 @@ class LoginForm extends Component{
     super(props);
     this.state={
       name :'',
-      password:'',
-      render : true
+      password:''
     };
     this.checkUser = this.checkUser.bind(this);
     this.updateName = this.updateName.bind(this);
@@ -34,86 +34,6 @@ class LoginForm extends Component{
     }
   }
 
-  loginMain(){
-    return(
-      <form style={{display: 'flex',flexWrap: 'wrap'}}>
-          <TextField
-            id="name"
-            label="Usuario"
-            margin="normal"
-            fullWidth
-            required
-            onChange = {e => this.updateName(e)}
-            error = {this.state.name.length === 0}
-          />
-
-          <TextField
-            id="password"
-            label="Contraseña"
-            margin="normal"
-            fullWidth
-            required
-            onChange = {e => this.updatePassword(e)}
-            error = {this.state.password.length === 0}
-          />
-          <CardActions>
-            <Button onClick={(e)=>this.checkUser(e)} size="small" color="primary">
-              Ingresar
-            </Button>
-
-            <Button onClick={(e)=>this.changeRender(e)} size="small" color="primary">
-              Registrarse
-            </Button>
-          </CardActions>
-      </form>
-    )
-  }
-
-  renderRegister(){
-    return(
-      <form style={{display: 'flex',flexWrap: 'wrap'}}>
-        <TextField
-          id="name"
-          label="Usuario"
-          margin="normal"
-          fullWidth
-          required
-        />
-
-        <TextField
-          id="email"
-          label="E-mail"
-          margin="normal"
-          fullWidth
-          required
-        />
-
-        <TextField
-          id="password"
-          label="Contraseña"
-          margin="normal"
-          fullWidth
-          required
-        />
-        <CardActions>
-          <Button  size="small" color="primary">
-            Terminar Registro
-          </Button>
-
-          <Button onClick={(e)=>this.changeRender(e)} size="small" color="primary">
-            Volver a iniciar sesión
-          </Button>
-        </CardActions>
-      </form>
-    )
-  }
-
-  changeRender(e){
-    this.setState( (prevState,props)=>{
-      return{render : !prevState.render}
-    })
-  }
-
   updateName(e){
     this.setState({
       name:e.target.value
@@ -127,10 +47,42 @@ class LoginForm extends Component{
   }
 
   render(){
-    let render = this.state.render;
     return(
       <div>
-        {render ?(this.loginMain()) :(this.renderRegister())}
+        <Typography align="center" variant="title" >
+          <br/>
+          Iniciar Sesión
+        </Typography>
+        <form style={{display: 'flex',flexWrap: 'wrap'}}>
+            <TextField
+              id="name"
+              label="Usuario"
+              margin="normal"
+              fullWidth
+              required
+              onChange = {e => this.updateName(e)}
+              error = {this.state.name.length === 0}
+            />
+
+            <TextField
+              id="password"
+              label="Contraseña"
+              margin="normal"
+              fullWidth
+              required
+              onChange = {e => this.updatePassword(e)}
+              error = {this.state.password.length === 0}
+            />
+            <CardActions>
+              <Button onClick={(e)=>this.checkUser(e)} size="small" color="primary">
+                Ingresar
+              </Button>
+
+              <Button onClick={(e)=>this.props.changeRender(e)} size="small" color="primary">
+                Registrarse
+              </Button>
+            </CardActions>
+        </form>
       </div>
     )
   }
