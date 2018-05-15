@@ -4,6 +4,7 @@ import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import {message} from 'antd';
+import {Redirect} from 'react-router';
 
 class RegisterForm extends Component{
   constructor(props){
@@ -11,8 +12,10 @@ class RegisterForm extends Component{
     this.state = {
       email:'',
       user:'',
-      password:''
+      password:'',
+      onUser : false
     }
+    this.sendAccount = this.sendAccount.bind(this);
   }
 
   handleChange(event){
@@ -27,13 +30,15 @@ class RegisterForm extends Component{
 
   sendAccount(event){
     // Realizar validación
-    message.loading('caca')
+    message.loading('caca');
+    this.setState({onUser: true})
     event.preventDefault();
   }
 
   render(){
     return(
       <div>
+        { this.state.onUser  && (<Redirect to="/user"/>) }
         <Typography align="center" variant="title" >
           <br/>
           Registrarse
