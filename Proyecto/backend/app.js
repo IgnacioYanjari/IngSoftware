@@ -7,6 +7,11 @@ var logger = require('morgan');
 // Configuración de nexmo
 var nexmo = require('./system/nexmo.js');
 
+// Configuración de MongoDB
+require('./system/mongoDB.js');
+
+//Configuración de Mongoose
+require('./system/mongoose.js');
 // Header
 var responseHeader = require('./system/responseHeader.js')
 
