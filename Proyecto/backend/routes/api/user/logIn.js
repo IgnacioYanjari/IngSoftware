@@ -50,7 +50,7 @@ module.exports = async(req, res, next) => {
     .then(user => {
       return new Promise( (resolve,reject) => {
         if(user == null){
-          return reject('Cuenta no registrada');
+          return reject('Error : Cuenta no registrada');
         }
 
         if(!user.validPassword(password)){
