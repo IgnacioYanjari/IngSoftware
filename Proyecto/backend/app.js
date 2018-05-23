@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // Configuración de nexmo
-var nexmo = require('./system/nexmo.js');
+// var nexmo = require('./system/nexmo.js');
 
 // Configuración de MongoDB
 require('./system/mongoDB.js');
@@ -17,8 +17,9 @@ var responseHeader = require('./system/responseHeader.js')
 
 // Require de las rutas:
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var sendSMS = require('./routes/sendSMS');
+var sendSMS = require('./routes/api/sms/sendSMS');
+var apiUser = require('./routes/api/user/main');
+
 
 var app = express();
 
@@ -39,8 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas :
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/sendSMS', sendSMS);
+app.use('/api/user',apiUser);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

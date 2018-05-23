@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-// Para usuarios, datos normales
 
+// Para usuarios, datos normales
 const UserSchema = new mongoose.Schema({
   rut: {
     type: String,
@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
   isDeleted :{
     type : Boolean,
     default: false
+  },
+  typeUser :{
+    type: Number,
+    default : ''
   }
 });
 

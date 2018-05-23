@@ -1,8 +1,9 @@
-import UserSchema from './user.js';
-import UserSessionSchema from './userSession.js';
+
+var User  = require('./user.js');
+var UserSession = require('./userSession.js');
 
 let models = {}
-models.UserSchema = UserSchema;
-models.userSessionSchema = UserSessionSchema;
+models.User = User;
+models.UserSession = UserSession;
 
 module.exports = models;
