@@ -1,6 +1,6 @@
 
-var User  = require('./user.js');
-var UserSession = require('./userSession.js');
+var User  = require('./user.js'),
+  UserSession = require('./userSession.js');
 
 let models = {}
 models.User = User;

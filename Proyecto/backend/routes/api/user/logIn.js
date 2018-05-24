@@ -1,8 +1,10 @@
 var bcrypt = require('bcrypt'),
-  { User, UserSession } = require('./../../../models/models.js');
+  { User, UserSession } = require('./../../../models/models'),
+  jwt = require('jsonwebtoken');
 
-const isPassword = require('./../utils/isPassword.js'),
-  isType = require('./../utils/isType.js');
+const isPassword = require('./../utils/isPassword'),
+  isType = require('./../utils/isType'),
+  configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
   const {query} = req;
@@ -56,7 +58,7 @@ module.exports = async(req, res, next) => {
         if(!user.validPassword(password)){
           return reject('Error: contraseña incorrecta');
         }
-        return resolve({id:user._id});
+        return resolve(user);
       })
     })
   }
@@ -67,7 +69,7 @@ module.exports = async(req, res, next) => {
     .then( (response) => {
       // console.log(response)
       UserSession.create({
-        userId: response.id
+        userId: response._id
       }, (err, doc) =>{
         if(err){
           return res.send({
@@ -75,11 +77,17 @@ module.exports = async(req, res, next) => {
             message: 'Error : error en servidor'
           })
         }
+        let token = jwt.sign( {dataUser : response, sessionId : doc._id},
+          configToken.secret_key ,{
+          expiresIn: 86400 // que expire en 24HRS
+        })
+
         return res.send({
           success:true,
           message: 'Ingreso validado',
-          token : doc._id
+          token : token
         })
+
       })
     })
     .catch ( err => {

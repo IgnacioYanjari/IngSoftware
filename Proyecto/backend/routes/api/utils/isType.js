@@ -23,5 +23,10 @@ module.exports = function(type){
   if( type == 4)
     return true;
 
+  // si es de Admin
+  if( type == 5)
+    return true;
+
+
   return false;
 }

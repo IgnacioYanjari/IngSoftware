@@ -1,7 +1,9 @@
 var express = require('express'),
   bcrypt = require('bcrypt'),
   { User, UserSession } = require('./../../../models/models.js'),
+  verifyToken = require('./../utils/verifyToken'),
   router = express.Router();
+  
 
 // Funciones usadas para api/user
 var logIn = require('./logIn'),
@@ -15,6 +17,6 @@ router.post('/log-in', logIn);
 router.post('/sign-in', signIn);
 
 /* POST log-out */
-router.post('/log-out',logOut)
+router.post('/log-out', verifyToken , logOut)
 
 module.exports = router;

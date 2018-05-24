@@ -1,15 +1,25 @@
 var bcrypt = require('bcrypt'),
-  { User, UserSession } = require('./../../../models/models.js');
+  { UserSession } = require('./../../../models/models.js'),
+  jwt = require('jsonwebtoken');
 
+const configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
-  const {query} = req;
-  let {token} = query;
+  let {token} = req;
+
+  function getSessionId(token){
+    return jwt.verify(token,configToken.secret_key, (err,decoded) =>{
+      if(err){
+        return new Promise( (resolve,reject) => reject(err) )
+      }
+      return new Promise((resolve,reject) => resolve(decoded.sessionId));
+    })
+  }
 
   // si existe sesión
-  function isExist(token){
+  function isExist(sessionId){
     return UserSession.findOne({
-      _id :token
+      _id :sessionId
     }).exec()
     .then(session => {
       if(session == null){
@@ -17,6 +27,7 @@ module.exports = async(req, res, next) => {
           return reject('Error : sesión ya cerrada');
         })
       }
+      return new Promise( (resolve,reject) => resolve(sessionId))
     })
     .catch( err => {
       return new Promise((resolve,reject)=>{
@@ -25,12 +36,16 @@ module.exports = async(req, res, next) => {
     })
   }
 
+  function searchAndExistSession(token){
+    return getSessionId(token)
+      .then( sessionId => isExist(sessionId))
+      .catch( err => new Promise( (resolve,reject) => reject(err)) );
+  }
 
-  // borrar solo si existe sesión
-  isExist(token)
-  .then( (response) =>{
+  searchAndExistSession(token)
+  .then( (sessionId) =>{
     UserSession.deleteOne({
-      _id : token
+      _id : sessionId
     }, err =>{
       if(err){
         return res.send({
@@ -45,12 +60,6 @@ module.exports = async(req, res, next) => {
     })
   })
   .catch(err =>{
-    if(err.name != null){
-      return res.send({
-        success:false,
-        message : 'Error : No existe sesión'
-      })
-    }
     return res.send({
       success:false,
       message : err.toString()
