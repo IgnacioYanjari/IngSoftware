@@ -3,7 +3,9 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Alfa Chile Seguridad' });
+  res.send({
+    title : 'Alfa Chile Seguridad Test'
+  })
 });
 
 module.exports = router;

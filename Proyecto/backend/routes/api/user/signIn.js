@@ -6,8 +6,8 @@ const isPassword = require('./../utils/isPassword.js'),
   isRut = require('./../utils/isRut.js');
 
 module.exports = async(req, res, next) => {
-  const {query} = req;
-  let {rut,email,password,type} = query;
+  const {body} = req;
+  let {rut,email,password,type} = body;
 
   // verificación rut
   if(!isRut(rut)){

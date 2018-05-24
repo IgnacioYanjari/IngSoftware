@@ -18,13 +18,44 @@ class LoginForm extends Component{
     this.handleChange = this.handleChange.bind(this);
   }
 
+
+/*
+fetch("http://localhost:3030/"+ruta,
+{
+    method: "POST",
+    body: parametro,
+    headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+})
+*/
   checkLogin(e){
+    message.loading('Esperando respuesta del servidor',1)
     const name = this.state.name;
     const password = this.state.password;
-    message.loading('Esperando respuesta del servidor',1)
-    console.log( "password : ", password);
-    console.log( "nombre : ", name);
-    this.setState({onUser: true});
+    let param = JSON.stringify({
+      email:'ignacio.yanjaari@mail.udp.cl',
+      password :'salskuci1',
+      type:'2',
+      rut :'192098327'
+    });
+
+    fetch('http://localhost:3000/api/user/log-in',{
+      method: 'POST',
+      body : param,
+      headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+      }
+    })
+    .then( res => res.json())
+    .then( res =>{
+      console.log(res)
+      this.setState({onUser: true})
+    })
+    .catch( err => console.log(err.toString()))
+
     e.preventDefault();
   }
 

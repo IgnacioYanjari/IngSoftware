@@ -1,4 +1,4 @@
-var bcrypt = require('bcrypt'),
+var bcrypt  = require('bcrypt'),
   { User, UserSession } = require('./../../../models/models'),
   jwt = require('jsonwebtoken');
 
@@ -7,11 +7,15 @@ const isPassword = require('./../utils/isPassword'),
   configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
-  const {query} = req;
-  let {rut,email,password,type} = query;
-
+  const {body} = req;
+  let {rut,email,password,type} = body;
+  console.log(req);
+  console.log('body : ');
+  console.log( req.body);
+  console.log('query : ');
+  console.log(req.query);
   // verificación rut
-  if( rut.length == 0 || rut == null){
+  if( rut == null){
     return res.send({
       success : false,
       message : 'Error en RUT'
@@ -19,7 +23,7 @@ module.exports = async(req, res, next) => {
   }
 
   // verificación email
-  if( email.length == 0 || email == null){
+  if( email == null){
     return res.send({
       success : false,
       message : 'Error en e-mail'
@@ -79,7 +83,7 @@ module.exports = async(req, res, next) => {
         }
         let token = jwt.sign( {dataUser : response, sessionId : doc._id},
           configToken.secret_key ,{
-          expiresIn: 86400 // que expire en 24HRS
+          expiresIn: 60 * 60 * 24 // que expire en 24HRS
         })
 
         return res.send({
