@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './../../App.css';
-import MainForm from './../Forms/MainForm.js';
+import LoginForm from './../Forms/LoginForm.js';
+import UserPage from '../Content/userContent';
 // import LockIcon from '@material-ui/icons/Lock'
 
 import Card, { CardContent } from 'material-ui/Card';
@@ -8,8 +9,27 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
 class LoginPage extends Component {
-  render() {
-    return (
+
+  constructor(props){
+    super(props);
+    this.state = {
+      onUserPage : false,
+      token : ''
+    }
+    this.changePage = this.changePage.bind(this);
+  }
+
+  changePage(token){
+
+    this.setState({token:token, onUserPage:true});
+  }
+
+  renderUserPage(){
+    const token = this.state.token;
+    return(<UserPage token={token} />);
+  }
+  renderLogin(){
+    return(
       <Grid container alignItems="center" className="margin" >
         <Grid item xs={1} sm={3} md={3} lg={4} >
         </Grid>
@@ -20,7 +40,7 @@ class LoginPage extends Component {
               <Typography align="center" variant="title" >
                   <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
               </Typography>
-              <MainForm/>
+              <LoginForm changeTouserPage = {this.changePage}/>
               <Typography style={{marginTop:'5%'}}align="center" variant="body2" >
                 Consultas a ......
               </Typography>
@@ -33,7 +53,14 @@ class LoginPage extends Component {
         </Grid>
 
       </Grid>
-
+    )
+  }
+  render() {
+    let onUserPage = this.state.onUserPage;
+    return (
+      <div>
+        { onUserPage ? (this.renderUserPage()) : (this.renderLogin())}
+      </div>
     );
   }
 }

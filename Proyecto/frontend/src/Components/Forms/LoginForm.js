@@ -4,15 +4,14 @@ import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import {message} from 'antd';
-import {Redirect} from 'react-router';
+
 
 class LoginForm extends Component{
   constructor(props){
     super(props);
     this.state={
-      user :'',
-      password:'',
-      onUser : false
+      user :'192098327',
+      password:'telescopi'
     };
     this.checkLogin = this.checkLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -20,25 +19,25 @@ class LoginForm extends Component{
 
 
 /*
-fetch("http://localhost:3030/"+ruta,
 {
-    method: "POST",
-    body: parametro,
-    headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-})
+	"email" : "ignacio.yanjari@mail.udp.cl",
+	"password" :"telescopi",
+	"type":"5",
+	"rut":"192098327"
+}
+sesiones :
+token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTiKOaZEkPOfzI0hETNfl_Ekr2tImR2vek
 */
+
   checkLogin(e){
     message.loading('Esperando respuesta del servidor',1)
-    const name = this.state.name;
+    const user = this.state.user;
     const password = this.state.password;
     let param = JSON.stringify({
-      email:'ignacio.yanjaari@mail.udp.cl',
-      password :'salskuci1',
-      type:'2',
-      rut :'192098327'
+      rut : user,
+      password : password,
+      token : '',
+      onUser:false
     });
 
     fetch('http://localhost:3000/api/user/log-in',{
@@ -51,11 +50,13 @@ fetch("http://localhost:3030/"+ruta,
     })
     .then( res => res.json())
     .then( res =>{
-      console.log(res)
-      this.setState({onUser: true})
+      message.destroy();
+      if(res.success){
+            this.props.changeTouserPage(res.token);
+      }else
+        message.warning(res.message,4)
     })
-    .catch( err => console.log(err.toString()))
-
+    .catch( err => message.warning(err.toString(),4));
     e.preventDefault();
   }
 
@@ -71,13 +72,13 @@ fetch("http://localhost:3030/"+ruta,
   render(){
     return(
       <div>
-        { this.state.onUser  && (<Redirect to="/user"/>) }
         <Typography align="center" variant="title" >
           <br/>
           Iniciar Sesión
         </Typography>
         <form style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.checkLogin}>
             <TextField
+              value = {this.state.user}
               name="user"
               label="Usuario"
               margin="normal"
@@ -88,6 +89,7 @@ fetch("http://localhost:3030/"+ruta,
             />
 
             <TextField
+              value = {this.state.password}
               name="password"
               label="Contraseña"
               type="password"
@@ -101,16 +103,11 @@ fetch("http://localhost:3030/"+ruta,
               <Button type="submit" size="small" color="primary">
                 Ingresar
               </Button>
-
-              <Button onClick={(e)=>this.props.changeRender(e)} size="small" color="primary">
-                Registrarse
-              </Button>
             </CardActions>
         </form>
       </div>
     )
   }
-
 }
 
 export default LoginForm;

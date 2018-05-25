@@ -79,9 +79,6 @@ class RegisterForm extends Component{
               Terminar Registro
             </Button>
 
-            <Button onClick={(e)=>this.props.changeRender(e)} size="small" color="primary">
-              Volver atras
-            </Button>
           </CardActions>
         </form>
       </div>

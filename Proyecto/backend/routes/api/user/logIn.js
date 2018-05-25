@@ -8,12 +8,7 @@ const isPassword = require('./../utils/isPassword'),
 
 module.exports = async(req, res, next) => {
   const {body} = req;
-  let {rut,email,password,type} = body;
-  console.log(req);
-  console.log('body : ');
-  console.log( req.body);
-  console.log('query : ');
-  console.log(req.query);
+  let {rut,password} = body;
   // verificación rut
   if( rut == null){
     return res.send({
@@ -22,39 +17,22 @@ module.exports = async(req, res, next) => {
     })
   }
 
-  // verificación email
-  if( email == null){
-    return res.send({
-      success : false,
-      message : 'Error en e-mail'
-    })
-  }
-
   // verificación password
   if( !isPassword(password)){
     return res.send({
       success : false,
-      message : 'Error en contraseña'
-    })
-  }
-
-  // verificación type
-  if( !isType(type)){
-    return res.send({
-      success : false,
-      message : 'Error en tipo usuario'
+      message : 'Error en contraseña ( tiene que ser de largo 9 ) '
     })
   }
 
   // se busca el usuario
-  function findUser(password,rut,type,email){
+  function findUser(password,rut){
     return User.findOne({
-      rut : rut,
-      typeUser : type,
-      email : email.toLowerCase()
+      rut : rut
     })
     .then(user => {
       return new Promise( (resolve,reject) => {
+        console.log(user)
         if(user == null){
           return reject('Error : Cuenta no registrada');
         }
@@ -69,7 +47,7 @@ module.exports = async(req, res, next) => {
 
 
   // Retorno la respuesta.
-  return findUser(password,rut,type,email)
+  return findUser(password,rut)
     .then( (response) => {
       // console.log(response)
       UserSession.create({
@@ -81,6 +59,7 @@ module.exports = async(req, res, next) => {
             message: 'Error : error en servidor'
           })
         }
+        // falta agregar nombres de usuario :) 
         let token = jwt.sign( {dataUser : response, sessionId : doc._id},
           configToken.secret_key ,{
           expiresIn: 60 * 60 * 24 // que expire en 24HRS

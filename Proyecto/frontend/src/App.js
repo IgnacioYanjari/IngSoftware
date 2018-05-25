@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import LoginPage   from './Components/Pages/LoginPage.js';
-import UserPage   from './Components/Pages/userPage.js';
+
+// module.exports = { secret_key : 'L;/Pr$Pb`~mvsC'}
 
 class App extends Component {
   render() {
@@ -9,7 +10,6 @@ class App extends Component {
       <Router>
         <div>
           <Route exact path="/" component={LoginPage}/>
-          <Route exact path="/user" component={UserPage}/>
         </div>
       </Router>
     );
