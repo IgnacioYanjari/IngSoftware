@@ -4,7 +4,7 @@ import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import {message} from 'antd';
-
+import {Redirect} from 'react-router-dom';
 
 class LoginForm extends Component{
   constructor(props){
@@ -52,11 +52,13 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
     .then( res =>{
       message.destroy();
       if(res.success){
-            this.props.changeTouserPage(res.token);
+          message.success('Ingreso correcto');
+            this.props.authenticate.authenticate(res.token,()=>{
+              this.setState({onUser:true})
+            })
       }else
-        message.warning(res.message,4)
+        message.warning(res.message,4);
     })
-    .catch( err => message.warning(err.toString(),4));
     e.preventDefault();
   }
 
@@ -70,41 +72,49 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
   }
 
   render(){
+    let onUser = this.state.onUser;
+    // const { from } = this.props.location.state || { from: { pathname: '/' } }
     return(
       <div>
-        <Typography align="center" variant="title" >
-          <br/>
-          Iniciar Sesión
-        </Typography>
-        <form style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.checkLogin}>
-            <TextField
-              value = {this.state.user}
-              name="user"
-              label="Usuario"
-              margin="normal"
-              fullWidth
-              required
-              onChange = {e => this.handleChange(e)}
+      { onUser ?
+        (<Redirect to='/user' />):
+        (
+          <div>
+            <Typography align="center" variant="title" >
+              <br/>
+              Iniciar Sesión
+            </Typography>
+            <form style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.checkLogin}>
+                <TextField
+                  value = {this.state.user}
+                  name="user"
+                  label="Usuario"
+                  margin="normal"
+                  fullWidth
+                  required
+                  onChange = {e => this.handleChange(e)}
 
-            />
+                />
 
-            <TextField
-              value = {this.state.password}
-              name="password"
-              label="Contraseña"
-              type="password"
-              margin="normal"
-              fullWidth
-              required
-              onChange = {e => this.handleChange(e)}
+                <TextField
+                  value = {this.state.password}
+                  name="password"
+                  label="Contraseña"
+                  type="password"
+                  margin="normal"
+                  fullWidth
+                  required
+                  onChange = {e => this.handleChange(e)}
 
-            />
-            <CardActions>
-              <Button type="submit" size="small" color="primary">
-                Ingresar
-              </Button>
-            </CardActions>
-        </form>
+                />
+                <CardActions>
+                  <Button type="submit" size="small" color="primary">
+                    Ingresar
+                  </Button>
+                </CardActions>
+            </form>
+          </div>
+      )}
       </div>
     )
   }
