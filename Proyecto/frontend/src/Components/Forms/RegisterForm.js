@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-import {message} from 'antd';
+import {message,notification} from 'antd';
 import {Redirect} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import FormControl from '@material-ui/core/FormControl';
@@ -31,18 +31,19 @@ class RegisterForm extends Component{
   constructor(props){
     super(props);
     this.state = {
-      email:'',
-      user:'',
-      password:'',
-      type : 'Guardia',
+      email:'das@dasjl.cl',
+      rut:'11',
+      password:'aaaaaaaaa',
+      type : 'Guardia Full-Time',
       onDisplay:false
     }
+    this.sendAccount = this.sendAccount.bind(this);
   }
 
   componentDidMount(){
     const token = localStorage.getItem('token');
     jwt.verify(token, 'L;/Pr$Pb`~mvsC', (err, decoded) => {
-      if(!err){
+      if(!err && decoded.dataUser.typeUser === 5){
         this.setState({
           onDisplay : true
         })
@@ -58,11 +59,49 @@ class RegisterForm extends Component{
       [name] : value
     });
   }
+  // <MenuItem value={'Guardia Full-Time'}>Guardia</MenuItem>
+  // <MenuItem value={'Guardia Part-Time'}>Guardia</MenuItem>
+  // <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
+  // <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
 
   sendAccount(event){
-    message.loading('caca');
     event.preventDefault();
+    let typeUser = {
+      'Guardia Full-Time' : 1,
+      'Guardia Part-Time' : 2,
+      'Jefe de guardia' : 3,
+      'Recursos Humanos' : 4
+    }
+    message.loading('Esperando respuesta del servidor',1);
+    const {rut,email,type,password} = this.state;
+
+    let param = JSON.stringify({
+      rut : rut,
+      password : password,
+      email : email,
+      type : typeUser[type.toString()]
+    });
+    fetch('http://localhost:3000/api/user/sign-in',{
+      method: 'POST',
+      body : param,
+      headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+      }
+    })
+    .then( res => res.json())
+    .then( res =>{
+      message.destroy();
+      if(res.success){
+        message.success('Cuenta creada correctamente');
+      }else
+        message.warning(res.message,4);
+    })
   }
+
+  //  Si necesito imprimir los valores :
+  // message.success('Cuenta creada correctamente \r\n '
+  // + param)
 
   render(){
     const {onDisplay} = this.state;
@@ -77,9 +116,10 @@ class RegisterForm extends Component{
             </Typography>
             <form action="" method="" style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.sendAccount}>
               <TextField
-                name="user"
+                value = {this.state.rut}
+                name="rut"
                 type="text"
-                label="Usuario"
+                label="Rut ( Sin guión ni puntos)"
                 margin="normal"
                 fullWidth
                 required
@@ -87,6 +127,7 @@ class RegisterForm extends Component{
               />
 
               <TextField
+                value = {this.state.email}
                 name="email"
                 label="E-mail"
                 margin="normal"
@@ -117,7 +158,8 @@ class RegisterForm extends Component{
                   id: 'type-user',
                 }}
                 >
-                 <MenuItem value={'Guardia'}>Guardia</MenuItem>
+                 <MenuItem value={'Guardia Full-Time'}>Guardia Full-Time</MenuItem>
+                 <MenuItem value={'Guardia Part-Time'}>Guardia Part-Time</MenuItem>
                  <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
                  <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
                </Select>

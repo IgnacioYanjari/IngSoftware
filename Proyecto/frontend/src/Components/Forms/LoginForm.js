@@ -30,6 +30,7 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
 */
 
   checkLogin(e){
+    e.preventDefault();
     message.loading('Esperando respuesta del servidor',1)
     const user = this.state.user;
     const password = this.state.password;
@@ -59,7 +60,6 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
       }else
         message.warning(res.message,4);
     })
-    e.preventDefault();
   }
 
   handleChange(event){
