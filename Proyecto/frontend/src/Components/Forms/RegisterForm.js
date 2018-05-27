@@ -112,9 +112,6 @@ class RegisterForm extends Component{
         (
           <div>
             <Typography align="center" variant="title" >
-                <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
-            </Typography>
-            <Typography align="center" variant="title" >
               <br/>
               Crear Cuenta
             </Typography>
