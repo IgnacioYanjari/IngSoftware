@@ -112,7 +112,6 @@ class RegisterForm extends Component{
         (
           <div>
             <Typography align="center" variant="title" >
-              <br/>
               Crear Cuenta
             </Typography>
             <form action="" method="" style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.sendAccount}>

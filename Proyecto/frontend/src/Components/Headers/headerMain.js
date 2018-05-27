@@ -14,6 +14,13 @@ const styles = {
   },
   flex: {
     flex: 1,
+  },
+  iconMenu: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+  iconImage :{
+    width: '70%'
   }
 };
 
@@ -73,12 +80,17 @@ class  HeaderMain  extends Component {
           <Redirect to="/" />
         ): (
           <div className={this.props.classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" color="inherit">
               <Toolbar>
-                <Typography align="center" variant="title" color="inherit" className={this.props.classes.flex}>
-                  {this.props.user}
+
+                <Typography align="left" variant="title"  >
+                    <img className={this.props.classes.iconImage} src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
                 </Typography>
-                <Button onClick ={this.logOut} color="inherit">Cerrar sesión</Button>
+
+                <Typography align="right" variant="title" color="inherit" className={this.props.classes.flex}>
+                  <Button onClick ={this.logOut} color="inherit" className={this.props.classes.flex} >Cerrar sesión</Button>
+                </Typography>
+
               </Toolbar>
             </AppBar>
           </div>
