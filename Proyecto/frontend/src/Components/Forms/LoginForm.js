@@ -60,6 +60,10 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
       }else
         message.warning(res.message,4);
     })
+    .catch(err=>{
+      message.destroy();
+      message.warning('Error en conexión');
+    })
   }
 
   handleChange(event){

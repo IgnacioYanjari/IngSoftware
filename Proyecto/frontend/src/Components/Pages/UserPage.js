@@ -7,6 +7,8 @@ import jwt from 'jsonwebtoken';
 import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import RegisterForm from './../Forms/RegisterForm';
+import {message} from 'antd';
+import HeaderMain from './../Headers/headerMain';
 
 const styles = theme => ({
   button: {
@@ -19,7 +21,8 @@ class UserPage extends Component {
   constructor(props){
     super(props);
     this.state = {
-      logOut:true
+      logOut:true,
+      rut:''
     }
   }
 // localStorage.removeItem('id_token'); para logOut
@@ -29,8 +32,10 @@ class UserPage extends Component {
     jwt.verify(token, 'L;/Pr$Pb`~mvsC', (err, decoded) => {
       if(!err){
         this.setState({
-          logOut : false
+          logOut : false,
+          rut : decoded.dataUser.rut
         })
+        message.info('Tipo de usuario : ' + decoded.dataUser.typeUser);
       }
     });
   }
@@ -64,23 +69,27 @@ class UserPage extends Component {
             </Grid>
           </Grid>
         ) : (
-          <Grid container alignItems="center" className="margin" >
-            <Grid item xs={1} sm={3} md={3} lg={4} >
-            </Grid>
+          <div>
+            <HeaderMain user={'Rut : ' + this.state.rut } authenticate={this.props.authenticate}/>
+            <Grid container alignItems="center" className="margin" >
+              <Grid item xs={1} sm={3} md={3} lg={4} >
+              </Grid>
 
-            <Grid item xs={10} sm={6} md={6} lg={4} >
-              <Card aling="center">
-                <CardContent>
-                  <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
-                    <RegisterForm/>
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+              <Grid item xs={10} sm={6} md={6} lg={4} >
+                <Card aling="center">
+                  <CardContent>
+                    <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
+                      <RegisterForm/>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-            <Grid item xs={1} sm={3} md={3} lg={4} >
+              <Grid item xs={1} sm={3} md={3} lg={4} >
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
+
         )
       }
 

@@ -11,8 +11,27 @@ import jwt from 'jsonwebtoken';
 
 // module.exports = { secret_key : 'L;/Pr$Pb`~mvsC'}
 
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={
+    props =>
+      authenticate.isAuthenticated ?
+      (<Component {...props} authenticate={authenticate}/>)
+      : (<Redirect to='/' />)
+    }
+  />
+);
+
+function isLoged(token){
+  return jwt.verify(token, 'L;/Pr$Pb`~mvsC', (err, decoded) => {
+    if(!err)
+    return true;
+    return false;
+  })
+}
+
 const authenticate = {
-  isAuthenticated : false,
+  isAuthenticated : isLoged(localStorage.getItem('token')),
   authenticate(token,callback){
     localStorage.setItem('token',token);
     jwt.verify(token, 'L;/Pr$Pb`~mvsC', (err, decoded) => {
@@ -29,19 +48,9 @@ const authenticate = {
   }
 }
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={
-    props =>
-      true ?
-      (<Component {...props} />)
-      : (<Redirect to='/' />)
-    }
-  />
-);
-
-
 class App extends Component {
   render() {
+    console.log(authenticate.isAuthenticated);
     return (
       <Router>
         <div>
@@ -52,5 +61,6 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;

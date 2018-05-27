@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import {Button} from 'material-ui';
 import {CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
-import {message,notification} from 'antd';
+import {message} from 'antd';
 import {Redirect} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import FormControl from '@material-ui/core/FormControl';
@@ -94,6 +94,7 @@ class RegisterForm extends Component{
       message.destroy();
       if(res.success){
         message.success('Cuenta creada correctamente');
+        message.warning('Error en conexión')
       }else
         message.warning(res.message,4);
     })
@@ -110,6 +111,9 @@ class RegisterForm extends Component{
         { onDisplay ?
         (
           <div>
+            <Typography align="center" variant="title" >
+                <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
+            </Typography>
             <Typography align="center" variant="title" >
               <br/>
               Crear Cuenta
