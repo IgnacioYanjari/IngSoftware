@@ -32,8 +32,8 @@ module.exports = function(rut){
   dvEsperado = 11 - (suma % 11);
 
   // Casos Especiales (0 y K)
-  dv = (dv == 'K')?10:dv;
-  dv = (dv == 0)?11:dv;
+  dv = (dv == 'K')? 10 : dv;
+  dv = (dv == 0)? 11 : dv;
   if(dvEsperado != dv)
     return false;
 

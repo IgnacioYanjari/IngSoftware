@@ -32,7 +32,7 @@ module.exports = async(req, res, next) => {
     })
     .then(user => {
       return new Promise( (resolve,reject) => {
-        console.log(user)
+        // console.log(user)
         if(user == null){
           return reject('Error : Cuenta no registrada');
         }
@@ -59,7 +59,7 @@ module.exports = async(req, res, next) => {
             message: 'Error : error en servidor'
           })
         }
-        // falta agregar nombres de usuario :) 
+        // falta agregar nombres de usuario :)
         let token = jwt.sign( {dataUser : response, sessionId : doc._id},
           configToken.secret_key ,{
           expiresIn: 60 * 60 * 24 // que expire en 24HRS

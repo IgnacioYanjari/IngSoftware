@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import {Button} from 'material-ui';
-import {CardActions} from 'material-ui/Card';
+import Card, {CardContent,CardActions} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import {message} from 'antd';
-import {Redirect} from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -32,7 +31,7 @@ class RegisterForm extends Component{
     super(props);
     this.state = {
       email:'das@dasjl.cl',
-      rut:'11',
+      rut:'111666059',
       password:'aaaaaaaaa',
       type : 'Guardia Full-Time',
       onDisplay:false
@@ -90,11 +89,10 @@ class RegisterForm extends Component{
       }
     })
     .then( res => res.json())
-    .then( res =>{
+    .then( res => {
       message.destroy();
       if(res.success){
         message.success('Cuenta creada correctamente');
-        message.warning('Error en conexión')
       }else
         message.warning(res.message,4);
     })
@@ -110,71 +108,74 @@ class RegisterForm extends Component{
       <div>
         { onDisplay ?
         (
-          <div>
-            <Typography align="center" variant="title" >
-              Crear Cuenta
-            </Typography>
-            <form action="" method="" style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.sendAccount}>
-              <TextField
-                value = {this.state.rut}
-                name="rut"
-                type="text"
-                label="Rut ( Sin guión ni puntos)"
-                margin="normal"
-                fullWidth
-                required
-                onChange = {e => this.handleChange(e)}
-              />
+          <Card aling="center">
+            <CardContent id="register">
+              <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
+                <Typography align="center" variant="title" >
+                  Crear Cuenta
+                </Typography>
+                <form action="" method="" style={{display: 'flex',flexWrap: 'wrap'}} onSubmit={this.sendAccount}>
+                  <TextField
+                    value = {this.state.rut}
+                    name="rut"
+                    type="text"
+                    label="Rut ( Sin guión ni puntos)"
+                    margin="normal"
+                    fullWidth
+                    required
+                    onChange = {e => this.handleChange(e)}
+                  />
 
-              <TextField
-                value = {this.state.email}
-                name="email"
-                label="E-mail"
-                margin="normal"
-                type="email"
-                fullWidth
-                required
-                onChange = {e => this.handleChange(e)}
-              />
+                  <TextField
+                    value = {this.state.email}
+                    name="email"
+                    label="E-mail"
+                    margin="normal"
+                    type="email"
+                    fullWidth
+                    required
+                    onChange = {e => this.handleChange(e)}
+                  />
 
-              <TextField
-                name="password"
-                value={this.state.password}
-                label="Contraseña"
-                type="password"
-                margin="normal"
-                fullWidth
-                required
-                onChange = {e => this.handleChange(e)}
-              />
-              <FormControl fullWidth className={styles.formControl}>
-               <InputLabel htmlFor="type-user">Tipo usuario</InputLabel>
-               <Select
-                required
-                value={this.state.type}
-                onChange={e => this.handleChange(e)}
-                inputProps={{
-                  name: 'type',
-                  id: 'type-user',
-                }}
-                >
-                 <MenuItem value={'Guardia Full-Time'}>Guardia Full-Time</MenuItem>
-                 <MenuItem value={'Guardia Part-Time'}>Guardia Part-Time</MenuItem>
-                 <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
-                 <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
-               </Select>
-              </FormControl>
-              <CardActions>
-                <Button type="submit"  size="small" color="primary">
-                  Terminar Registro
-                </Button>
-              </CardActions>
-            </form>
-          </div>
+                  <TextField
+                    name="password"
+                    value={this.state.password}
+                    label="Contraseña"
+                    type="password"
+                    margin="normal"
+                    fullWidth
+                    required
+                    onChange = {e => this.handleChange(e)}
+                  />
+                  <FormControl fullWidth className={styles.formControl}>
+                   <InputLabel htmlFor="type-user">Tipo usuario</InputLabel>
+                   <Select
+                    required
+                    value={this.state.type}
+                    onChange={e => this.handleChange(e)}
+                    inputProps={{
+                      name: 'type',
+                      id: 'type-user',
+                    }}
+                    >
+                     <MenuItem value={'Guardia Full-Time'}>Guardia Full-Time</MenuItem>
+                     <MenuItem value={'Guardia Part-Time'}>Guardia Part-Time</MenuItem>
+                     <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
+                     <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
+                   </Select>
+                  </FormControl>
+                  <CardActions>
+                    <Button type="submit"  size="small" color="primary">
+                      Terminar Registro
+                    </Button>
+                  </CardActions>
+                </form>
+              </Typography>
+            </CardContent>
+          </Card>
         ) : (
           <div> </div>
         )}
-        { this.state.onUser  && (<Redirect to="/user"/>) }
 
       </div>
     )
