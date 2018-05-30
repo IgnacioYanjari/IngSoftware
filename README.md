@@ -14,3 +14,4 @@ Desarrollo de proyecto y informes
   - Comando para mongodb : sudo mongod --dbpath=data/
   - Comando para express : npm start
   - Comando para mongo compass : DEBUG=* mongodb-compass;
+  - [Link para correr react en heroku](https://gist.github.com/mars/5e01bb2a074594b44870cb087f54fe2f)
