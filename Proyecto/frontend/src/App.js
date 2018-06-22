@@ -50,7 +50,6 @@ const authenticate = {
 
 class App extends Component {
   render() {
-    console.log(authenticate.isAuthenticated);
     return (
       <Router>
         <div>
@@ -61,6 +60,5 @@ class App extends Component {
     );
   }
 }
-
 
 export default App;

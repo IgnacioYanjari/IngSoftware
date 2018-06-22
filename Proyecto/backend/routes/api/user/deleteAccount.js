@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt'),
-  { User, UserSession } = require('./../../../models/models.js'),
+  { Usuarios, SesionesUsuario } = require('./../../../models/models.js'),
   jwt = require('jsonwebtoken');
 
 const configToken = require('./../../../system/configToken');
@@ -18,7 +18,7 @@ module.exports = async(req, res, next) => {
   }
 
   function findUser(rut){
-    return User.findOne({
+    return Usuarios.findOne({
       rut: rut
     })
     .then( user =>{
@@ -31,7 +31,7 @@ module.exports = async(req, res, next) => {
   }
 
   function deleteSessions(userId){
-    return UserSession.deleteMany({
+    return SesionesUsuario.deleteMany({
       userId : userId
     }, err =>{
       return new Promise( (resolve,reject) =>{
@@ -43,7 +43,7 @@ module.exports = async(req, res, next) => {
   }
 
   function deleteUser(rut){
-    return User.deleteOne({
+    return Usuarios.deleteOne({
       rut:rut
     }, err =>{
       return new Promise( (resolve, reject) =>{

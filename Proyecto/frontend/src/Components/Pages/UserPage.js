@@ -6,11 +6,13 @@ import Typography from 'material-ui/Typography';
 import jwt from 'jsonwebtoken';
 import {Link} from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import {message} from 'antd';
-import RegisterForm from './../Forms/RegisterForm';
 import HeaderMain from './../Headers/headerMain';
-import DeleteAccount from './../Forms/DeleteForm';
 import ListOfButtons from './../Raw/ListOfButtons';
+import RegisterForm from './../Forms/RegisterForm';
+import DeleteAccount from './../Forms/DeleteForm';
+import DateForm from './../Forms/DateForm';
+import ListForm from './../Forms/ListForm';
+import HourForm from './../Forms/HourForm';
 
 const styles = theme => ({
   button: {
@@ -27,7 +29,6 @@ class UserPage extends Component {
       rut:''
     }
   }
-// localStorage.removeItem('id_token'); para logOut
 
   componentDidMount(){
     const token = localStorage.getItem('token');
@@ -37,7 +38,7 @@ class UserPage extends Component {
           logOut : false,
           rut : decoded.dataUser.rut
         })
-        message.info('Tipo de usuario : ' + decoded.dataUser.typeUser);
+        // message.info('Tipo de usuario : ' + decoded.dataUser.typeUser);
       }
     })
   }
@@ -49,16 +50,16 @@ class UserPage extends Component {
       <div>
       { logOut === true ?
         (
-          <Grid container alignItems="center" className="margin" >
+          <Grid container className="margin" >
             <Grid item xs={1} sm={3} md={3} lg={4} >
             </Grid>
             <Grid item xs={10} sm={6} md={6} lg={4} >
               <Card aling="center">
                 <CardContent>
-                  <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
+                  <Typography className="margin" align="center" variant="body2" >
                     <p> Su sesión ya expiró </p>
                     <Link id="raised-button-file" to='/'>
-                        <Button variant="raised" color="primary" className={styles.button}>
+                        <Button variant="raised" color="primary" style={styles.button}>
                           Regresar a iniciar sesión
                         </Button>
                     </Link>
@@ -72,33 +73,28 @@ class UserPage extends Component {
           </Grid>
         ) : (
           <div>
-            <HeaderMain user={'Rut : ' + this.state.rut } authenticate={this.props.authenticate}/>
-            <Grid container alignItems="center" className="margin" >
-
-              <Grid item xs={10} sm={10} md={10} lg={10} style={{marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}} >
+            <HeaderMain authenticate={this.props.authenticate}/>
+              <div style={{marginTop:'2%', marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}}  >
                 <ListOfButtons/>
-              </Grid>
+              </div>
 
+              <div style={{marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}}  >
+                < RegisterForm />
+                < DateForm />
+                < ListForm />
+                < HourForm />
+              </div>
 
-              <Grid item xs={10} sm={10} md={10} lg={10}  style={{marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}} >
-                <RegisterForm />
-              </Grid>
+              <div style={{marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}}  >
+                < DeleteAccount />
+              </div>
 
-              <Grid item xs={10} sm={10} md={10} lg={10}  style={{marginRight:'5%',marginLeft:'5%', marginBottom:'5%'}} >
-                <DeleteAccount/>
-              </Grid>
-
-            </Grid>
           </div>
 
         )
       }
-
       </div>
     );
   }
 }
-// <LockIcon style={{ fontSize: 30 }}/>
-// <div>
-
 export default UserPage;

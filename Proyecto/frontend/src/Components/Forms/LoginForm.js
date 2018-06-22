@@ -10,28 +10,17 @@ class LoginForm extends Component{
   constructor(props){
     super(props);
     this.state={
-      user :'192098327',
-      password:'telescopi'
+      user :'',
+      password:''
     };
     this.checkLogin = this.checkLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
 
-/*
-{
-	"email" : "ignacio.yanjari@mail.udp.cl",
-	"password" :"telescopi",
-	"type":"5",
-	"rut":"192098327"
-}
-sesiones :
-token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTiKOaZEkPOfzI0hETNfl_Ekr2tImR2vek
-*/
-
   checkLogin(e){
     e.preventDefault();
-    message.loading('Esperando respuesta del servidor',1)
+    message.loading('Esperando respuesta del servidor',100)
     const user = this.state.user;
     const password = this.state.password;
     let param = JSON.stringify({
@@ -52,7 +41,7 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
     .then( res => res.json())
     .then( res =>{
       message.destroy();
-      if(res.success){
+      if(res.success === true){
           message.success('Ingreso correcto');
             this.props.authenticate.authenticate(res.token,()=>{
               this.setState({onUser:true})
@@ -77,7 +66,6 @@ token1 : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhVXNlc…jIwfQ.UhrYic2MstTi
 
   render(){
     let onUser = this.state.onUser;
-    // const { from } = this.props.location.state || { from: { pathname: '/' } }
     return(
       <div>
       { onUser ?

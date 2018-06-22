@@ -1,5 +1,5 @@
 var bcrypt  = require('bcrypt'),
-  { User, UserSession } = require('./../../../models/models'),
+  { Usuarios, SesionesUsuario } = require('./../../../models/models'),
   jwt = require('jsonwebtoken');
 
 const isPassword = require('./../utils/isPassword'),
@@ -7,8 +7,10 @@ const isPassword = require('./../utils/isPassword'),
   configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
+
   const {body} = req;
   let {rut,password} = body;
+  console.log(rut + '\n' + password)
   // verificación rut
   if( rut == null){
     return res.send({
@@ -27,12 +29,12 @@ module.exports = async(req, res, next) => {
 
   // se busca el usuario
   function findUser(password,rut){
-    return User.findOne({
-      rut : rut
+    return Usuarios.findOne({
+      rut:rut
     })
     .then(user => {
       return new Promise( (resolve,reject) => {
-        // console.log(user)
+        console.log(user)
         if(user == null){
           return reject('Error : Cuenta no registrada');
         }
@@ -50,7 +52,7 @@ module.exports = async(req, res, next) => {
   return findUser(password,rut)
     .then( (response) => {
       // console.log(response)
-      UserSession.create({
+      SesionesUsuario.create({
         userId: response._id
       }, (err, doc) =>{
         if(err){

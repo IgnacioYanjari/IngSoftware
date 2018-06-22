@@ -57,7 +57,8 @@ class RegisterForm extends Component{
     .then( res => res.json())
     .then( res => {
       message.destroy();
-      if(res.success){
+      // console.log(res);
+      if(res.success === true){
         message.success('Cuenta Borrada Correctamente');
       }else
         message.warning(res.message);
@@ -71,9 +72,9 @@ class RegisterForm extends Component{
       <div>
         { onDisplay ?
         (
-          <Card aling="center">
-            <CardContent id="delete">
-              <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
+          <Card >
+            <CardContent id="borrar">
+              <Typography align="center" variant="body2" >
                 <Typography align="center" variant="title" >
                   Borrar Cuenta
                 </Typography>

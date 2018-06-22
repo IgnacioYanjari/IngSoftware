@@ -31,8 +31,8 @@ class RegisterForm extends Component{
     super(props);
     this.state = {
       email:'das@dasjl.cl',
-      rut:'111666059',
-      password:'aaaaaaaaa',
+      rut:'',
+      password:'',
       type : 'Guardia Full-Time',
       onDisplay:false
     }
@@ -69,9 +69,11 @@ class RegisterForm extends Component{
       'Guardia Full-Time' : 1,
       'Guardia Part-Time' : 2,
       'Jefe de guardia' : 3,
-      'Recursos Humanos' : 4
+      'Recursos Humanos' : 4,
+      'Administrador' : 5
     }
     message.loading('Esperando respuesta del servidor',1);
+    const token = localStorage.getItem('token');
     const {rut,email,type,password} = this.state;
 
     let param = JSON.stringify({
@@ -84,14 +86,16 @@ class RegisterForm extends Component{
       method: 'POST',
       body : param,
       headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+        'authorization' : 'Bearer ' + token,
+        'Origin' : 'X-Requested-With',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }
     })
     .then( res => res.json())
     .then( res => {
       message.destroy();
-      if(res.success){
+      if(res.success === true ){
         message.success('Cuenta creada correctamente');
       }else
         message.warning(res.message,4);
@@ -108,9 +112,9 @@ class RegisterForm extends Component{
       <div>
         { onDisplay ?
         (
-          <Card aling="center">
-            <CardContent id="register">
-              <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
+          <Card >
+            <CardContent id="registrar">
+              <Typography align="center" variant="body2" >
                 <Typography align="center" variant="title" >
                   Crear Cuenta
                 </Typography>
@@ -162,6 +166,7 @@ class RegisterForm extends Component{
                      <MenuItem value={'Guardia Part-Time'}>Guardia Part-Time</MenuItem>
                      <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
                      <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
+                     <MenuItem value={'Administrador'}>Administrador</MenuItem>
                    </Select>
                   </FormControl>
                   <CardActions>

@@ -1,6 +1,4 @@
 import React,{Component} from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -14,26 +12,22 @@ const styles = {
   },
   flex: {
     flex: 1,
+    marginLeft:'10px'
   },
   iconMenu: {
-    marginLeft: -12,
-    marginRight: 20,
+    marginLeft:'40px',
+    marginRight: '20px',
+    marginBottom:'10px'
   },
-  iconImage :{
-    width: '70%'
+  image : {
+    maxWidth:100,
   }
 };
 
 class  HeaderMain  extends Component {
 
-  //propiedades estáticas
-  static defaultProps = {
-    ...Component.defaultProps,
-    classes: styles
-  }
-
-  constructor(defaultProps){
-    super(defaultProps);
+  constructor(props){
+    super(props);
     this.state={
       logOut :false
     }
@@ -43,27 +37,30 @@ class  HeaderMain  extends Component {
   logOut(){
 
     const token = localStorage.getItem('token');
-    message.loading('cerrando sesión');
+    message.loading('cerrando sesión',1000);
     fetch('http://localhost:3000/api/user/log-out',{
       method: 'POST',
       headers:{
           'authorization' : 'Bearer ' + token,
-          'Origin' : 'X-Requested-With',
+          'X-Requested-With': 'XMLHttpRequest',
           'Accept': 'application/json',
           'Content-Type': 'application/json'
       }
     })
     .then( res => res.json())
     .then( res =>{
-      if(res.success){
+      if(res.success === true){
           this.props.authenticate.signout(()=>{
             message.destroy();
             message.success('sesión cerrada');
             localStorage.removeItem('token');
             this.setState({logOut:true})
           });
-      }else
+      }else{
+        localStorage.removeItem('token');
+        this.setState({logOut:true})
         message.warning(res.message,4);
+      }
     })
     .catch(err=>{
       message.destroy();
@@ -79,16 +76,16 @@ class  HeaderMain  extends Component {
       { logOut ? (
           <Redirect to="/" />
         ): (
-          <div className={this.props.classes.root}>
+          <div style={styles.root}>
             <AppBar position="static" color="inherit">
               <Toolbar>
+              <Typography style={styles.iconMenu} >
+              <img style={styles.image} src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
+              </Typography>
 
-                <Typography align="left" variant="title"  >
-                    <img className={this.props.classes.iconImage} src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
-                </Typography>
 
-                <Typography align="right" variant="title" color="inherit" className={this.props.classes.flex}>
-                  <Button onClick ={this.logOut} color="inherit" className={this.props.classes.flex} >Cerrar sesión</Button>
+                <Typography align="right" variant="title" color="inherit" style={styles.flex}>
+                  <Button onClick ={this.logOut} color="inherit" style={styles.flex} >Cerrar sesión</Button>
                 </Typography>
 
               </Toolbar>
@@ -97,14 +94,10 @@ class  HeaderMain  extends Component {
         )
       }
       </div>
-
     );
   }
 
 }
 
-HeaderMain.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
-export default withStyles(styles)(HeaderMain);
+export default HeaderMain;

@@ -1,49 +1,57 @@
 var bcrypt = require('bcrypt'),
-  { User, UserSession } = require('./../../../models/models.js');
+  { Usuarios } = require('./../../../models/models.js'),
+  jwt = require('jsonwebtoken');
 
 const isPassword = require('./../utils/isPassword.js'),
   isType = require('./../utils/isType.js'),
-  isRut = require('./../utils/isRut.js');
+  isRut = require('./../utils/isRut.js'),
+  configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
-  const {body} = req;
+  const {body,token} = req;
   let {rut,email,password,type} = body;
 
-  // verificación rut
-  if(!isRut(rut)){
-    return res.send({
-      success : false,
-      message : 'Error en RUT'
+
+  function checkVariables(email,rut,password,type){
+    return new Promise((resolve,reject)=>{
+      // verificación rut
+      if(!isRut(rut))
+        return reject('Error en RUT');
+
+      // verificación email
+      if( email == null){
+        return reject('Error en e-mail');
+        if(email.length == 0 )
+          return reject('Error en e-mail');
+      }
+
+      // verificación password
+      if( !isPassword(password))
+        return reject('Error en contraseña');
+
+      // verificación type
+      if( !isType(type))
+        return reject('Error en tipo usuario');
+
+      return resolve(email)
     })
   }
 
-  // verificación email
-  if( email.length == 0 || email == null){
-    return res.send({
-      success : false,
-      message : 'Error en e-mail'
+
+
+  function getDataUser(token){
+    return jwt.verify(token,configToken.secret_key, (err,decoded) =>{
+      if(err){
+        return new Promise( (resolve,reject) => reject(err) )
+      }
+      return new Promise((resolve,reject) => resolve(decoded));
     })
   }
 
-  // verificación password
-  if( !isPassword(password)){
-    return res.send({
-      success : false,
-      message : 'Error en contraseña'
-    })
-  }
-
-  // verificación type
-  if( !isType(type)){
-    return res.send({
-      success : false,
-      message : 'Error en tipo usuario'
-    })
-  }
 
   // Buscar que no exista cuenta asociada a mail o rut entregado
   function isValidEmail(email){
-    return User.find().or([
+    return Usuarios.find().or([
       {email : email} , {rut : rut}
     ]).then( response =>{
       return new Promise((resolve,reject)=>{
@@ -55,32 +63,60 @@ module.exports = async(req, res, next) => {
     })
   }
 
-  // Retorno la respuesta.
-  return isValidEmail(email)
-  .then( (response) =>{
-    const newUser = new User({
-      email : email.toLowerCase(),
-      rut : rut,
-      typeUser : type
-    });
-    newUser.password = newUser.generateHash(password);
-    newUser.save( (err,user)=>{
-      if(err){
-        return res.send({
-          succes:false,
-          message: 'Error : error en servidor'
+  function createAccount(email){
+    return isValidEmail(email)
+    .then( (response) =>{
+      const newUser = new Usuarios({
+        email : email.toLowerCase(),
+        rut : rut,
+        typeUser : type
+      });
+      newUser.password = newUser.generateHash(password);
+      newUser.save( (err,user)=>{
+        if(err){
+          return res.send({
+            succes:false,
+            message: 'Error : error en servidor'
+          })
+        }
+        return res.status(200).send({
+          success : true,
+          message : 'Usuario creado con exito'
         })
-      }
-      return res.status(200).send({
-        success : true,
-        message : 'Usuario creado con exito'
       })
     })
-  })
-  .catch ( (err) => {
-    return res.send({
-      success : false,
-      message : err.toString()
+    .catch ( (err) => {
+      return res.send({
+        success : false,
+        message : err.toString()
+      })
     })
-  })
+  }
+
+  return getDataUser(token)
+    .then( user =>{
+      console.log(user);
+      if(user.dataUser.typeUser !== 5){
+        return res.send({
+          success: false,
+          message : 'Permiso denegado'
+        })
+      }
+      return checkVariables(email,rut,password,type)
+        .then( email =>{
+          return createAccount(email)
+        })
+        .catch( err =>{
+          return res.send({
+            success: false,
+            message : err.toString()
+          })
+        })
+    })
+    .catch( err =>{
+      res.send({
+        success: false,
+        message : err.toString()
+      })
+    })
 };

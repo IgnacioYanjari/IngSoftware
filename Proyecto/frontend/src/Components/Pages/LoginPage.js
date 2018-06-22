@@ -35,8 +35,8 @@ class LoginPage extends Component {
         { isLoged ? (
             <Redirect to ='/user' />
           ):(
-            <div>
-              <Grid container alignItems="center" className="margin" >
+            <div className="margin"  >
+              <Grid container alignItems="center">
                 <Grid item xs={1} sm={3} md={3} lg={4} >
                 </Grid>
 
@@ -47,7 +47,7 @@ class LoginPage extends Component {
                           <img src="./logoAlfaChile.jpg" alt="Logo-Empresarial"/>
                       </Typography>
                       <LoginForm {...this.props} authenticate={this.props.authenticate}/>
-                      <Typography style={{marginTop:'5%'}}align="center" variant="body2" >
+                      <Typography style={{marginTop:'5%'}} align="center" variant="body2" >
                         Consultas a ......
                       </Typography>
                     </CardContent>
@@ -55,9 +55,7 @@ class LoginPage extends Component {
                 </Grid>
 
                 <Grid item xs={1} sm={3} md={3} lg={4} >
-
                 </Grid>
-
               </Grid>
             </div>
           )

@@ -1,9 +1,9 @@
 
-var User  = require('./user.js'),
-  UserSession = require('./userSession.js');
+var Usuarios  = require('./usuarios.js'),
+  SesionesUsuario = require('./sesionesUsuario.js');
 
 let models = {}
-models.User = User;
-models.UserSession = UserSession;
+models.Usuarios = Usuarios;
+models.SesionesUsuario = SesionesUsuario;
 
 module.exports = models;
