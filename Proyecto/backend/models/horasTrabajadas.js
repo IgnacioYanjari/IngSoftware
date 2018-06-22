@@ -5,16 +5,22 @@ const mongoose = require('mongoose'),
 // Para usuarios, datos normales
 const HorasTrabajadas = new mongoose.Schema({
   mes : {
-    type: String,
-    mes : Number,
-    dia : Number,
-    cantHoras : Number,
+    type: Number,
+    required : true
+  },
+  dia : {
+    type : Number
+    required: true
+  },
+  cantidadHoras : {
+    type : Number,
     required : true
   }
-  guardiasId : [{
+  guardiasId : {
     type: Schema.Type.ObjectId,
     ref: 'Guardias'
-  }]
+    required : true
+  }
 });
 
 module.exports = mongoose.model('HorasTrabajadas', HorasTrabajadas);

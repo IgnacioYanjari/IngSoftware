@@ -4,16 +4,19 @@ const mongoose = require('mongoose'),
 
 // Para usuarios, datos normales
 const Guardias = new mongoose.Schema({
+  rut:{
+    type: String,
+    required : true
+  }
   direccion : {
     type: String,
-    default: '',
     required: true
   },
-  jefeGuardia : {
+  jefesGuardiaId : [{
     type: Schema.Type.ObjectId,
     ref : 'JefeGuardias'
-  },
-  sesionId:{
+  }],
+  usuarioId: {
     type: Schema.Type.ObjectId,
     ref: 'Usuarios',
     required : true
@@ -34,10 +37,10 @@ const Guardias = new mongoose.Schema({
     type: Schema.type.ObjectId,
     ref : 'HorasTrabajadas'
   }],
-  tipoGuardiasId : [{
+  tipoGuardiasId : {
     type: Schema.type.ObjectId,
     ref : 'TiposGuaridas'
-  }]
+  }
 
 });
 

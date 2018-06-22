@@ -11,11 +11,11 @@ const Horarios = new mongoose.Schema({
     type: Date,
     required : true
   }
-  guardiasId :[{
+  guardiasId :{
     type: Schema.Type.ObjectId,
     ref : 'Guardias',
     required : true
-  }]
+  }
 
 });
 

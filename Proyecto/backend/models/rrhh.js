@@ -6,22 +6,21 @@ const mongoose = require('mongoose'),
 const RecursosHumanos = new mongoose.Schema({
   rut : {
     type: String,
-    default: '',
     required: true
   },
   empleados : {
     type : Number,
-    default : ''
+    required : true
   },
   direccion : {
     type : String,
-    default : ''
+    required : true
   }
-  sesionId:{
+  usuarioId: {
     type: Schema.Type.ObjectId,
     ref: 'Usuarios',
     required : true
-  }
+  },
   guardiasId : [{
     type: Schema.Type.ObjectId,
     ref: 'Guardias'

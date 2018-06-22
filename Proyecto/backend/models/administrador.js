@@ -6,10 +6,9 @@ const mongoose = require('mongoose'),
 const Administradores = new mongoose.Schema({
   rut : {
     type: String,
-    default: '',
     required: true
   },
-  sesionId:{
+  usuarioId:{
     type: Schema.Type.ObjectId,
     ref: 'Usuarios',
     required : true

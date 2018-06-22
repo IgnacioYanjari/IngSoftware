@@ -6,17 +6,14 @@ const mongoose = require('mongoose'),
 const TipoGuardias = new mongoose.Schema({
   contrato : {
     type: String,
-    default: '',
     required: true
   },
   tipoTurno : {
     type: String,
-    default : '',
     required : true
   },
   cantidadTurnos : {
-    type : String,
-    default : '',
+    type : Number,
     required : true
   }
   guardiasId :{

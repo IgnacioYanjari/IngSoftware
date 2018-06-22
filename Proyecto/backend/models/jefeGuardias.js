@@ -6,18 +6,17 @@ const mongoose = require('mongoose'),
 const JefeGuardias = new mongoose.Schema({
   rut : {
     type: String,
-    default: '',
     required: true
   },
-  sesionId:{
+  usuarioId:{
     type: Schema.Type.ObjectId,
     ref: 'Usuarios',
     required : true
   }
-  implementosId :{
+  implementosId :[{
     type: Schema.Type.ObjectId,
     ref : 'Implementos'
-  },
+  }],
   guardiasId : [{
     type: Schema.Type.ObjectId,
     ref: 'Guardias'

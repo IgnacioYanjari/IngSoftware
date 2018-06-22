@@ -6,19 +6,19 @@ const mongoose = require('mongoose'),
 const Implementos = new mongoose.Schema({
   nombre : {
     type: String,
-    default: ''
+    required : true
   },
   tipo:{
     type: String,
-    default: ''
+    required : true
   },
   cantidad :{
     type: Number,
-    default: ''
+    required : true
   },
   detalles :{
     type : String,
-    default: ''
+    required : true
   },
   guardiaId :{
     type: Schema.Type.ObjectId,

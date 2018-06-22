@@ -5,17 +5,18 @@ const mongoose = require('mongoose'),
 const Usuarios = new mongoose.Schema({
   rut: {
     type: String,
-    default: '',
     required: true
   },
+  nombre :{
+    type: String,
+    required : true
+  }
   email:{
     type: String,
-    default: '',
     required: true
   },
   password :{
     type: String,
-    default: '',
     required: true
   },
   isDeleted :{
@@ -24,7 +25,6 @@ const Usuarios = new mongoose.Schema({
   },
   typeUser :{
     type: Number,
-    default : '',
     required: true
   }
 });
