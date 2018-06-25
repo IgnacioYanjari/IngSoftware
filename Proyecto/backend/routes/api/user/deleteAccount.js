@@ -70,15 +70,15 @@ module.exports = async(req, res, next) => {
   }
 
   getDataUser(token)
-  .then( dataUser =>{
-    if(dataUser.dataUser.typeUser == 5){
+  .then( response =>{
+    if(response.dataUser.typeUser == 5){
       let token2 = jwt.sign({
-        dataUser : user.dataUser,
-        sessionId : user.sessionId},
+        dataUser : response.dataUser,
+        sessionId : response.sessionId},
         configToken.secret_key ,{
         expiresIn: 60 * 60 * 24 // que expire en 24HRS
       })
-      return deleteAccount(dataUser.dataUser.rut,rut,token2)
+      return deleteAccount(response.dataUser.rut,rut,token2)
     }
     return res.send({
       success: false,
