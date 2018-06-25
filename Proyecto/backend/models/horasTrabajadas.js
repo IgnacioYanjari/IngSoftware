@@ -9,16 +9,16 @@ const HorasTrabajadas = new mongoose.Schema({
     required : true
   },
   dia : {
-    type : Number
+    type : Number,
     required: true
   },
   cantidadHoras : {
     type : Number,
     required : true
-  }
-  guardiasId : {
-    type: Schema.Type.ObjectId,
-    ref: 'Guardias'
+  },
+  guardiaId : {
+    type: Schema.Types.ObjectId,
+    ref: 'Guardias',
     required : true
   }
 });

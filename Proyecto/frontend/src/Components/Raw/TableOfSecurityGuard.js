@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from 'material-ui/Typography';
 import { Row, Col } from 'antd';
 import Button from '@material-ui/core/Button';
+import {message} from 'antd';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -90,16 +91,46 @@ class  CustomizedTable extends Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
+
+    message.loading('Esperando respuesta del servidor',100);
+    const token = localStorage.getItem('token');
+    let param = {}
+    fetch('http://localhost:3000/api/user/get-listaGuardias',{
+      method: 'POST',
+      body : param,
+      headers: {
+        'authorization' : 'Bearer ' + token,
+        'Origin' : 'X-Requested-With',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then( res => res.json())
+    .then( res => {
+      console.log(res)
+      message.destroy();
+      if(res.success === true ){
+        localStorage.remove('token');
+        localStorage.setItem('token',res.token);
+        this.createDataList(res.data);
+        message.success(res.message,10);
+      }else
+        message.warning(res.message,10);
+    })
+
+  }
+
+  createDataList(data){
+    let arr = [],
+      checked = [];
+    for( let name of data){
+      arr.push(createData(name));
+      checked.push(false);
+    }
     this.setState({
-      data : [
-        createData('Ignacia Paz Abarzúa Gómez'),
-        createData('Renzo Matías Aburto Fernández'),
-        createData('Amaru Clemente Ahumada Korpimäki'),
-        createData('Cristóbal Kalen Alcaíno Bravo'),
-        createData('Agustín Ignacio Devoto Rojas'),
-      ],
-      checked : [ false, false, false, false, false ]
+      data : arr,
+      checked : checked
     });
   }
 
@@ -117,7 +148,7 @@ class  CustomizedTable extends Component {
       cnt++;
     }
 
-    // console.log(jsonObject);
+    console.log(jsonObject);
   }
 
   onChangeBox(i){

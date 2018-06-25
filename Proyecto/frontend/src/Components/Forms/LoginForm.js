@@ -10,8 +10,8 @@ class LoginForm extends Component{
   constructor(props){
     super(props);
     this.state={
-      user :'',
-      password:''
+      user :'194223080',
+      password:'aaaaaaaaa'
     };
     this.checkLogin = this.checkLogin.bind(this);
     this.handleChange = this.handleChange.bind(this);

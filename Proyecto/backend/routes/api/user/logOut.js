@@ -1,5 +1,5 @@
-var bcrypt = require('bcrypt'),
-  { SesionUsuarios } = require('./../../../models/models.js'),
+let bcrypt = require('bcrypt'),
+  { Usuarios, SesionesUsuario } = require('./../../../models/models.js'),
   jwt = require('jsonwebtoken');
 
 const configToken = require('./../../../system/configToken');
@@ -18,7 +18,7 @@ module.exports = async(req, res, next) => {
 
   // si existe sesión
   function isExist(sessionId){
-    return SesionUsuarios.findOne({
+    return SesionesUsuario.findOne({
       _id :sessionId
     }).exec()
     .then(session => {
@@ -44,7 +44,7 @@ module.exports = async(req, res, next) => {
 
   searchAndExistSession(token)
   .then( (sessionId) =>{
-    SesionUsuarios.deleteOne({
+    SesionesUsuario.deleteOne({
       _id : sessionId
     }, err =>{
       if(err){

@@ -1,8 +1,10 @@
-var bcrypt = require('bcrypt'),
+let bcrypt = require('bcrypt'),
   { Usuarios, SesionesUsuario } = require('./../../../models/models.js'),
+  models = require('./../../../models/models.js'),
   jwt = require('jsonwebtoken');
 
-const configToken = require('./../../../system/configToken');
+const configToken = require('./../../../system/configToken'),
+  deleteOthers = require('./../utils/bdd/deleteUser.js');
 
 module.exports = async(req, res, next) => {
   let {token} = req;
@@ -19,7 +21,7 @@ module.exports = async(req, res, next) => {
 
   function findUser(rut){
     return Usuarios.findOne({
-      rut: rut
+      rut: rut.toString()
     })
     .then( user =>{
       return new Promise( (resolve,reject) =>{
@@ -42,31 +44,24 @@ module.exports = async(req, res, next) => {
     })
   }
 
-  function deleteUser(rut){
-    return Usuarios.deleteOne({
-      rut:rut
-    }, err =>{
-      return new Promise( (resolve, reject) =>{
-        if(err)
-          return reject(err);
-        return resolve(true);
-      })
-    })
-  }
 
-  function deleteAccount(rut){
+  function deleteAccount(myRut,rut,token2){
     return findUser(rut)
     .then( user => {
-      deleteUser(rut)
-      .then( isDeleteUser =>
-        deleteSessions(user.rut)
-        .then( isDeleteSession => res.send({
-            success : true,
-            message : 'Sesiones y usuario borradas'
+        if( myRut != user.rut)
+          return deleteOthers(user,models)
+            .then( response =>{
+              return res.send({
+                success: true,
+                token: token2,
+                message: 'Cuenta eliminada correctamente'
+              })
+            })
+        else return res.send({
+            success: false,
+            message : 'No te puedes borrar a ti mismo'
           })
-        )
-      )
-    })
+      })
     .catch( err => res.send({
         success: false,
         message: err.toString()
@@ -77,7 +72,13 @@ module.exports = async(req, res, next) => {
   getDataUser(token)
   .then( dataUser =>{
     if(dataUser.dataUser.typeUser == 5){
-      return deleteAccount(rut)
+      let token2 = jwt.sign({
+        dataUser : user.dataUser,
+        sessionId : user.sessionId},
+        configToken.secret_key ,{
+        expiresIn: 60 * 60 * 24 // que expire en 24HRS
+      })
+      return deleteAccount(dataUser.dataUser.rut,rut,token2)
     }
     return res.send({
       success: false,

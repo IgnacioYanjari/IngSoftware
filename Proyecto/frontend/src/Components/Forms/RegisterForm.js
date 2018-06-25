@@ -24,16 +24,20 @@ const styles = theme => ({
   },
 });
 
+// Agregar Direccion en : RRHH(4), Guardia Full-Time(1) y Part-Time(2)
+
 
 
 class RegisterForm extends Component{
   constructor(props){
     super(props);
     this.state = {
-      email:'das@dasjl.cl',
-      rut:'',
-      password:'',
+      email:'das@ddsaasjldsa.cl',
+      name : 'Juan Jose Saez Vergara',
+      rut:'189556373',
+      password:'aaaaaaaaa',
       type : 'Guardia Full-Time',
+      direccion : 'Miraflores N° 70, Ciudad de Santiago.',
       onDisplay:false
     }
     this.sendAccount = this.sendAccount.bind(this);
@@ -58,10 +62,31 @@ class RegisterForm extends Component{
       [name] : value
     });
   }
-  // <MenuItem value={'Guardia Full-Time'}>Guardia</MenuItem>
-  // <MenuItem value={'Guardia Part-Time'}>Guardia</MenuItem>
-  // <MenuItem value={'Jefe de guardia'}>Jefe de guardia</MenuItem>
-  // <MenuItem value={'Recursos Humanos'}>Recursos Humanos</MenuItem>
+
+  renderDireccion(){
+    const typeUser = {
+      'Guardia Full-Time' : 1,
+      'Guardia Part-Time' : 2,
+      'Jefe de guardia' : 3,
+      'Recursos Humanos' : 4,
+      'Administrador' : 5
+    }, {type} = this.state;
+    let aux = typeUser[type];
+    if( aux === 1 || aux === 2 || aux === 4){
+      return(
+        <TextField
+        value = {this.state.direccion}
+        name="direccion"
+        type="text"
+        label="Direccion"
+        margin="normal"
+        fullWidth
+        required
+        onChange = {e => this.handleChange(e)}
+        />
+      )
+    }
+  }
 
   sendAccount(event){
     event.preventDefault();
@@ -74,13 +99,14 @@ class RegisterForm extends Component{
     }
     message.loading('Esperando respuesta del servidor',1);
     const token = localStorage.getItem('token');
-    const {rut,email,type,password} = this.state;
-
+    const {name,rut,email,type,password,direccion} = this.state;
     let param = JSON.stringify({
       rut : rut,
       password : password,
       email : email,
-      type : typeUser[type.toString()]
+      type : typeUser[type.toString()],
+      name : name,
+      direccion : direccion
     });
     fetch('http://localhost:3000/api/user/sign-in',{
       method: 'POST',
@@ -94,17 +120,16 @@ class RegisterForm extends Component{
     })
     .then( res => res.json())
     .then( res => {
+      console.log(res)
       message.destroy();
       if(res.success === true ){
+        localStorage.removeItem('token');
+        localStorage.setItem('token',res.token);
         message.success('Cuenta creada correctamente');
       }else
         message.warning(res.message,4);
     })
   }
-
-  //  Si necesito imprimir los valores :
-  // message.success('Cuenta creada correctamente \r\n '
-  // + param)
 
   render(){
     const {onDisplay} = this.state;
@@ -130,6 +155,17 @@ class RegisterForm extends Component{
                     onChange = {e => this.handleChange(e)}
                   />
 
+                  <TextField
+                    value = {this.state.name}
+                    name="name"
+                    type="text"
+                    label="Ingresar nombre completo "
+                    margin="normal"
+                    fullWidth
+                    required
+                    onChange = {e => this.handleChange(e)}
+                  />
+                  { this.renderDireccion() }
                   <TextField
                     value = {this.state.email}
                     name="email"

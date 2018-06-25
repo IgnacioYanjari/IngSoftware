@@ -21,7 +21,7 @@ const Implementos = new mongoose.Schema({
     required : true
   },
   guardiaId :{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref : 'Guardias',
     required: 'true'
   }

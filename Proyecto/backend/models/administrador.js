@@ -9,7 +9,7 @@ const Administradores = new mongoose.Schema({
     required: true
   },
   usuarioId:{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Usuarios',
     required : true
   }

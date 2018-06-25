@@ -10,12 +10,12 @@ const Usuarios = new mongoose.Schema({
   nombre :{
     type: String,
     required : true
-  }
+  },
   email:{
     type: String,
     required: true
   },
-  password :{
+  contraseña :{
     type: String,
     required: true
   },
@@ -29,12 +29,12 @@ const Usuarios = new mongoose.Schema({
   }
 });
 
-Usuarios.methods.generateHash = function(password){
-  return bcrypt.hashSync(password, bcrypt.genSaltSync(8),null);
+Usuarios.methods.generateHash = function(contraseña){
+  return bcrypt.hashSync(contraseña, bcrypt.genSaltSync(8),null);
 }
 
-Usuarios.methods.validPassword = function(password){
-  return bcrypt.compareSync(password,this.password);
+Usuarios.methods.validPassword = function(contraseña){
+  return bcrypt.compareSync(contraseña,this.contraseña);
 }
 
 module.exports = mongoose.model('Usuarios', Usuarios);

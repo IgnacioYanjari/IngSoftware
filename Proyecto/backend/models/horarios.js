@@ -3,16 +3,16 @@ const mongoose = require('mongoose'),
   bcrypt = require('bcrypt');
 
 const Horarios = new mongoose.Schema({
-  Inicio : {
+  inicio : {
     type: Date,
     required: true
   },
-  Termino:{
+  termino:{
     type: Date,
     required : true
-  }
-  guardiasId :{
-    type: Schema.Type.ObjectId,
+  },
+  guardiaId :{
+    type: Schema.Types.ObjectId,
     ref : 'Guardias',
     required : true
   }

@@ -59,7 +59,9 @@ class RegisterForm extends Component{
       message.destroy();
       // console.log(res);
       if(res.success === true){
-        message.success('Cuenta Borrada Correctamente');
+        localStorage.removeItem('token');
+        localStorage.setItem('token',res.token);
+        message.success(res.message);
       }else
         message.warning(res.message);
     })

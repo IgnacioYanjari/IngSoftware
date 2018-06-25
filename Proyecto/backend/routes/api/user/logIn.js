@@ -1,5 +1,5 @@
-var bcrypt  = require('bcrypt'),
-  { Usuarios, SesionesUsuario } = require('./../../../models/models'),
+let bcrypt  = require('bcrypt'),
+  { Usuarios, SesionesUsuario } = require('./../../../models/models.js'),
   jwt = require('jsonwebtoken');
 
 const isPassword = require('./../utils/isPassword'),
@@ -10,7 +10,7 @@ module.exports = async(req, res, next) => {
 
   const {body} = req;
   let {rut,password} = body;
-  console.log(rut + '\n' + password)
+  
   // verificación rut
   if( rut == null){
     return res.send({
@@ -34,7 +34,7 @@ module.exports = async(req, res, next) => {
     })
     .then(user => {
       return new Promise( (resolve,reject) => {
-        console.log(user)
+
         if(user == null){
           return reject('Error : Cuenta no registrada');
         }
@@ -66,7 +66,6 @@ module.exports = async(req, res, next) => {
           configToken.secret_key ,{
           expiresIn: 60 * 60 * 24 // que expire en 24HRS
         })
-
         return res.send({
           success:true,
           message: 'Ingreso validado',

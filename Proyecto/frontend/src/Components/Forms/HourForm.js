@@ -10,6 +10,7 @@ class HourForm extends Component{
   constructor(props){
     super(props);
     this.state = {
+      rut: '183934708',
       onDisplay:false
     }
     this.sendAccount = this.sendAccount.bind(this);
@@ -28,32 +29,43 @@ class HourForm extends Component{
 
   sendAccount(event){
     event.preventDefault();
-    // message.loading('Esperando respuesta del servidor',1);
-    // const token = localStorage.getItem('token');
-    // const {rut} = this.state;
-    // let param = JSON.stringify({
-    //   rut : rut
-    // });
-    // fetch('http://localhost:3000/api/user/delete-account',{
-    //   method: 'POST',
-    //   body : param,
-    //   headers: {
-    //     'authorization' : 'Bearer ' + token,
-    //     'Origin' : 'X-Requested-With',
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // .then( res => res.json())
-    // .then( res => {
-    //   message.destroy();
-    //   // console.log(res);
-    //   if(res.success === true){
-    //     message.success('Cuenta Borrada Correctamente');
-    //   }else
-    //     message.warning(res.message);
-    // })
-    // .catch(err => console.log(err));
+    message.loading('Esperando respuesta del servidor',1);
+    const token = localStorage.getItem('token');
+    const {rut} = this.state;
+    let param = JSON.stringify({
+      rut : rut
+    });
+    fetch('http://localhost:3000/api/user/horas-trabajadas',{
+      method: 'POST',
+      body : param,
+      headers: {
+        'authorization' : 'Bearer ' + token,
+        'Origin' : 'X-Requested-With',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then( res => res.json())
+    .then( res => {
+      message.destroy();
+      console.log(res);
+      if(res.success === true){
+        localStorage.removeItem('token');
+        localStorage.setItem('token',res.token);
+        message.success(res.message + ' : ' + res.horas + 'hr(s)' ,10);
+      }else
+        message.warning(res.message);
+    })
+    .catch(err => console.log(err));
+  }
+
+  handleChange(event){
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name] : value
+    });
   }
 
   render(){
@@ -74,11 +86,14 @@ class HourForm extends Component{
                      onSubmit={this.sendAccount}>
 
                      <TextField
+                       value={this.state.rut}
+                       name="rut"
                        type="text"
                        label="   RUT ( Sin guión ni puntos)"
                        margin="normal"
                        fullWidth
                        required
+                       onChange = {e => this.handleChange(e)}
                      />
 
                      <CardActions>

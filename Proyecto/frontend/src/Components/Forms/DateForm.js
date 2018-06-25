@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import Card, {CardContent} from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import {message} from 'antd';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText';
 import jwt from 'jsonwebtoken';
 import chrono from 'chrono-node';
 import moment from 'moment';
@@ -10,7 +13,7 @@ import InfiniteCalendar from 'react-infinite-calendar';
 import format from 'date-fns/format';
 import {Calendar,defaultMultipleDateInterpolation,withMultipleDates} from 'react-infinite-calendar';
 import 'react-infinite-calendar/styles.css'; // only needs to be imported once
-
+import shortid from 'shortid';
 
 const MultipleDatesCalendar = withMultipleDates(Calendar);
 
@@ -20,20 +23,23 @@ const styles = theme => ({
   }
 });
 
+const flexContainer = {
+  display: 'flex',
+  flexDirection: 'row',
+  padding: 0,
+};
 
 class DateForm extends Component{
 
   constructor(props){
     super(props);
-    const today = new Date();
 
     this.state = {
       onDisplay:false,
-      displayPicker: false,
-      dates : [today]
+      dates : []
     }
     this.handleChangePicker = this.handleChangePicker.bind(this);
-    this.renderTextButton = this.renderTextButton.bind(this);
+    this.sendData = this.sendData.bind(this);
   }
 
   componentDidMount(){
@@ -51,11 +57,35 @@ class DateForm extends Component{
     });
   }
 
-
-  // sendDate(event){
-  //   event.preventDefault();
-  //   message.loading('Esperando respuesta del servidor',1);
-  // }
+  sendData(){
+    message.loading('Esperando respuesta del servidor',1);
+    const token = localStorage.getItem('token');
+    const {dates} = this.state;
+    let param = JSON.stringify({
+      dates : dates
+    });
+    fetch('http://localhost:3000/api/user/add-horario',{
+      method: 'POST',
+      body : param,
+      headers: {
+        'authorization' : 'Bearer ' + token,
+        'Origin' : 'X-Requested-With',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then( res => res.json())
+    .then( res => {
+      message.destroy();
+      if(res.success === true){
+        localStorage.removeItem('token');
+        localStorage.setItem('token',res.token);
+        message.success(res.message);
+      }else
+        message.warning(res.message);
+    })
+    .catch(err => console.log(err));
+  }
 
   handleChangePicker(){
     this.setState((prevState, props) => {
@@ -64,11 +94,12 @@ class DateForm extends Component{
   }
 
   renderPicker(){
-    const {displayPicker,dates} = this.state,
-      minDate = moment().startOf('hour').fromNow(),
+    const {dates} = this.state,
+      minDate = moment().endOf('hour').fromNow(),
       maxDate = moment().endOf('month').fromNow();
-    if( !displayPicker)
-      return(<div></div>)
+
+    let aux = moment(chrono.parseDate(minDate)).toDate();
+
     return(
       <InfiniteCalendar
         Component = {MultipleDatesCalendar}
@@ -91,14 +122,6 @@ class DateForm extends Component{
     )
   }
 
-  renderTextButton(){
-    const {displayPicker} = this.state;
-    if( !displayPicker)
-      return("Iniciar selección de horario")
-    return("Finalizar horario")
-  }
-
-
   render(){
     const {dates,onDisplay} = this.state;
     return(
@@ -112,19 +135,27 @@ class DateForm extends Component{
                   Seleccionar Horario
                 </Typography>
 
-                <p> Fechas elegidas : </p>
-
-                {dates.map( date => <p> {moment(date).format('YYYY-MM-DD')} </p>)}
-
-
                 <br/>
-                <Button onClick ={this.handleChangePicker} variant="raised" color="primary" className={styles.button} >
-                  {this.renderTextButton()}
-                </Button>
-
-                <br/>
+                <p> Fechas seleccionadas {'( Formato Mes-Dia )'} : </p>
+                <List style={flexContainer}>
+                  { dates.map( (date,pos) => {
+                      return(
+                        <ListItem key ={shortid.generate()}>
+                          <ListItemText inset
+                            primary = { 'Nro : ' + (pos+1).toString()}
+                            secondary ={moment(date).format('MM-DD')}/>
+                        </ListItem>
+                      )
+                    })
+                  }
+                </List>
                 <br/>
                 {this.renderPicker()}
+                <br/>
+
+                <Button onClick = { this.sendData } variant="raised" color="primary" >
+                  Guardiar Horario Preferido
+                </Button>
 
               </Typography>
             </CardContent>

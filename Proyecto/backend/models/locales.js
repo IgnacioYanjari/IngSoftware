@@ -11,7 +11,7 @@ const Locales = new mongoose.Schema({
   calle : {
     type : String,
     required : true
-  }
+  },
   numero : {
     type : Number,
     required : true
@@ -19,9 +19,9 @@ const Locales = new mongoose.Schema({
   comuna : {
     type : String,
     required : true
-  }
+  },
   ClienteId:{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Clientes',
     required : true
   }

@@ -1,15 +1,18 @@
-var bcrypt = require('bcrypt'),
-  { Usuarios } = require('./../../../models/models.js'),
+let bcrypt = require('bcrypt'),
+  { Usuarios} = require('./../../../models/models.js'),
+  models = require('./../../../models/models.js'),
   jwt = require('jsonwebtoken');
 
 const isPassword = require('./../utils/isPassword.js'),
   isType = require('./../utils/isType.js'),
   isRut = require('./../utils/isRut.js'),
+  isName = require('./../utils/isName.js'),
+  createUser = require('./../../../models/utils/createUser.js'),
   configToken = require('./../../../system/configToken');
 
 module.exports = async(req, res, next) => {
   const {body,token} = req;
-  let {rut,email,password,type} = body;
+  let {name,rut,email,password,type,direccion} = body;
 
 
   function checkVariables(email,rut,password,type){
@@ -17,6 +20,12 @@ module.exports = async(req, res, next) => {
       // verificación rut
       if(!isRut(rut))
         return reject('Error en RUT');
+
+      // verificación de  nombre
+      let auxName = isName(name);
+      if(auxName != "true")
+        return reject(auxName)
+
 
       // verificación email
       if( email == null){
@@ -64,28 +73,37 @@ module.exports = async(req, res, next) => {
   }
 
   function createAccount(email){
+
     return isValidEmail(email)
-    .then( (response) =>{
-      const newUser = new Usuarios({
-        email : email.toLowerCase(),
-        rut : rut,
-        typeUser : type
-      });
-      newUser.password = newUser.generateHash(password);
-      newUser.save( (err,user)=>{
-        if(err){
+    .then( (response) => {
+      let params = {
+        rut:rut,
+        typeUser: type,
+        nombre : name,
+        email: email,
+        contraseña : password,
+        direccion : direccion,
+        contrato : ''
+      }
+      if( type == 1 )
+        params.contrato = 'Full-Time';
+      else if (type == 2)
+        params.contrato = 'Part-Time';
+      return createUser(params,models)
+        .then( user => {
           return res.send({
-            succes:false,
-            message: 'Error : error en servidor'
+            success: true,
+            message : 'Cuenta creada correctamente'
           })
-        }
-        return res.status(200).send({
-          success : true,
-          message : 'Usuario creado con exito'
         })
-      })
+        .catch( err => {
+          return res.send({
+            success : false,
+            message : err.toString()
+          })
+        })
     })
-    .catch ( (err) => {
+    .catch ( err => {
       return res.send({
         success : false,
         message : err.toString()
@@ -95,10 +113,16 @@ module.exports = async(req, res, next) => {
 
   return getDataUser(token)
     .then( user =>{
-      console.log(user);
       if(user.dataUser.typeUser !== 5){
+        let token2 = jwt.sign({
+          dataUser : user.dataUser,
+          sessionId : user.sessionId},
+          configToken.secret_key ,{
+          expiresIn: 60 * 60 * 24 // que expire en 24HRS
+        })
         return res.send({
           success: false,
+          token : token2,
           message : 'Permiso denegado'
         })
       }
@@ -106,7 +130,7 @@ module.exports = async(req, res, next) => {
         .then( email =>{
           return createAccount(email)
         })
-        .catch( err =>{
+        .catch( err => {
           return res.send({
             success: false,
             message : err.toString()

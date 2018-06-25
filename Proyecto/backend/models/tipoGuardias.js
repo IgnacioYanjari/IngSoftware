@@ -10,14 +10,14 @@ const TipoGuardias = new mongoose.Schema({
   },
   tipoTurno : {
     type: String,
-    required : true
+    default:'5x2'
   },
   cantidadTurnos : {
     type : Number,
-    required : true
-  }
+    default : 0
+  },
   guardiasId :{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref : 'Guardias',
     required : true
   },

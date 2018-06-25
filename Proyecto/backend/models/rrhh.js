@@ -10,21 +10,17 @@ const RecursosHumanos = new mongoose.Schema({
   },
   empleados : {
     type : Number,
-    required : true
+    default: 0
   },
   direccion : {
     type : String,
     required : true
-  }
+  },
   usuarioId: {
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Usuarios',
     required : true
-  },
-  guardiasId : [{
-    type: Schema.Type.ObjectId,
-    ref: 'Guardias'
-  }]
+  }
 });
 
 module.exports = mongoose.model('RecursosHumanos', RecursosHumanos);

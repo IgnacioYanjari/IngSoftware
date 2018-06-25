@@ -9,16 +9,16 @@ const JefeGuardias = new mongoose.Schema({
     required: true
   },
   usuarioId:{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Usuarios',
     required : true
-  }
+  },
   implementosId :[{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref : 'Implementos'
   }],
   guardiasId : [{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Guardias'
   }]
 });

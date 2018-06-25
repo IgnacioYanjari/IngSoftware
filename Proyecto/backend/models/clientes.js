@@ -5,7 +5,7 @@ const mongoose = require('mongoose'),
 // Para usuarios, datos normales
 const Clientes = new mongoose.Schema({
   telefono : {
-    type: Number
+    type: Number,
     required: true
   },
   nombre : {
@@ -15,13 +15,13 @@ const Clientes = new mongoose.Schema({
   email : {
     type : String,
     required : true
-  }
+  },
   localesId:[{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Locales'
   }],
   guardiasId : [{
-    type: Schema.Type.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Guardias'
   }]
 });
